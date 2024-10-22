@@ -10,8 +10,8 @@
 ~/hadoop-3.4.0/etc/hadoop
 ```
 
-1. На team-5-nn, team-5-dn-00, team-5-dn-01
-В конфигурационный файл mapred-site.xml нужно добавить следующую информацию в блок ```<configuration></configuration>```, который изначально пустой.
+1. На team-5-nn, team-5-dn-0, team-5-dn-1
+в конфигурационный файл mapred-site.xml нужно добавить следующую информацию в блок ```<configuration></configuration>```, который изначально пустой.
 
 ```xml
 <configuration>
@@ -26,8 +26,8 @@
 </configuration>
 ```
 
-2. На team-5-nn, team-5-dn-00, team-5-dn-01
-В конфигурационный файл yarn-site.xml нужно добавить следующую информацию в блок ```<configuration></configuration>```, который изначально пустой.
+2. На team-5-nn, team-5-dn-0, team-5-dn-1
+в конфигурационный файл yarn-site.xml нужно добавить следующую информацию в блок ```<configuration></configuration>```, который изначально пустой.
 
 ```xml
 <configuration>
@@ -44,25 +44,23 @@
 ```
 
 ## Шаг 2. Запуск YARN
-На team-5-nn выполнить команду
-
-```bash
-./sbin/start-yarn.sh
-```
-Из директории
+На team-5-nn из директории
 ```bash
 ~/hadoop-3.4.0
+```
+Выполнить следующую команду
+```bash
+/sbin/start-yarn.sh
 ```
 
 ## Шаг 3. Запуск historyserver
-На team-5-nn выполнить команду
-
-```bash
-mapred --daemon start historyserver
-```
-Из директории
+На team-5-nn из директории
 ```bash
 ~/hadoop-3.4.0
+```
+выполнить следующую команду
+```bash
+mapred --daemon start historyserver
 ```
 
 ## Шаг 4. Доступ к UI
