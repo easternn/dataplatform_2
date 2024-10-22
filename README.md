@@ -2,7 +2,7 @@
 
 ## Шаг 0. Требования
 
-- HDFS Запущен через пользователя hadoop на всех нодах. Все дальнейшие инструкции должны быть выполнены из под данного пользователя
+- HDFS Запущен через пользователя hadoop. Все дальнейшие инструкции должны быть выполнены из под данного пользователя
 
 ## Шаг 1. Конфигурация
 Все конфигурационные файлы лежат в директории
@@ -11,7 +11,7 @@
 ```
 
 1. На team-5-nn, team-5-dn-00, team-5-dn-01
-В конфигурационный файл mapred-site.xml нужно добавить следующую информацию в блок <configuration></configuration>, который изначально пустой.
+В конфигурационный файл mapred-site.xml нужно добавить следующую информацию в блок ```<configuration></configuration>```, который изначально пустой.
 
 ```xml
 <configuration>
@@ -27,7 +27,7 @@
 ```
 
 2. На team-5-nn, team-5-dn-00, team-5-dn-01
-В конфигурационный файл yarn-site.xml нужно добавить следующую информацию в блок <configuration></configuration>, который изначально пустой.
+В конфигурационный файл yarn-site.xml нужно добавить следующую информацию в блок ```<configuration></configuration>```, который изначально пустой.
 
 ```xml
 <configuration>
@@ -54,28 +54,34 @@
 ~/hadoop-3.4.0
 ```
 
-## Шаг 3. Доступ к UI
-
-На локальной машине выполнить команду:
-```bash
-ssh -L 9880:192.168.1.23:8088 -L 9881:192.168.1.23:8042 -L 9882:192.168.1.24:8042 -L 9883:192.168.1.25:8042 team@176.109.91.7
-```
-
-Доступ к веб-интерфейсам:
-
-- Resource Manager (team-5-nn): <http://localhost:9880>
-- Node Manager (team-5-nn): <http://localhost:9881>
-- Node Manager (team-5-dn-00): <http://localhost:9882>
-- Node Manager (team-5-dn-01): <http://localhost:9883>
-
-## Шаг 4. Остановка
-
+## Шаг 3. Запуск historyserver
 На team-5-nn выполнить команду
 
 ```bash
-./sbin/stop-yarn.sh
+mapred --daemon start historyserver
 ```
 Из директории
 ```bash
 ~/hadoop-3.4.0
 ```
+
+## Шаг 4. Доступ к UI
+
+На локальной машине выполнить команду:
+```bash
+ssh -L 9881:192.168.1.23:9864 -L 9882:192.168.1.24:9864 -L 9883:192.168.1.25:9864 -L 9884:192.168.1.23:9870  -L 9885:192.168.1.23:19888 team@176.109.91.7
+```
+
+Доступ к веб-интерфейсам:
+
+- Data Node (team-5-nn): <http://localhost:9881>
+- Data Node (team-5-dn-00): <http://localhost:9882>
+- Data Node (team-5-dn-01): <http://localhost:9883>
+- Name Node (team-5-nn): <http://localhost:9884>
+- History Server (team-5-nn): <http://localhost:9885>
+
+## Шаг 5. Остановка всех сервисов
+
+- Остановка History Server. На team-5-nn выполнить команду ```mapred --daemon stop historyserver``` Из директории ```~/hadoop-3.4.0```
+- Остановка YARN. На team-5-nn выполнить команду ```./sbin/stop-yarn.sh``` Из директории ```~/hadoop-3.4.0```
+- Остановка HDFS. На team-5-nn выполнить команду ```./sbin/stop-dfs.sh``` Из директории ```~/hadoop-3.4.0```
