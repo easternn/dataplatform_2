@@ -64,22 +64,7 @@
 mapred --daemon start historyserver
 ```
 
-## Шаг 4. Доступ к UI
-
-На локальной машине выполнить команду:
-```bash
-ssh -L 9881:192.168.1.23:9864 -L 9882:192.168.1.24:9864 -L 9883:192.168.1.25:9864 -L 9884:192.168.1.23:9870  -L 9885:192.168.1.23:19888 team@176.109.91.7
-```
-
-Доступ к веб-интерфейсам:
-
-- Data Node (team-5-nn): <http://localhost:9881>
-- Data Node (team-5-dn-00): <http://localhost:9882>
-- Data Node (team-5-dn-01): <http://localhost:9883>
-- Name Node (team-5-nn): <http://localhost:9884>
-- History Server (team-5-nn): <http://localhost:9885>
-
-## Шаг 5. Остановка всех сервисов
+## Шаг 4. Остановка всех сервисов
 
 - Остановка History Server. На team-5-nn выполнить команду ```mapred --daemon stop historyserver``` Из директории ```~/hadoop-3.4.0```
 - Остановка YARN. На team-5-nn выполнить команду ```./sbin/stop-yarn.sh``` Из директории ```~/hadoop-3.4.0```
