@@ -65,7 +65,7 @@
 /sbin/start-yarn.sh
 ```
 
-## Шаг 4. Запуск historyserver
+## Шаг 5. Запуск historyserver
 На team-5-nn из директории
 ```bash
 ~/hadoop-3.4.0
