@@ -1,11 +1,10 @@
 # Развертывание YARN
 
-## Поднятие Веб интерфейсов описано в репозитории с ДЗ3
-
 ## Шаг 0. Требования
 
 - HDFS Запущен через пользователя hadoop. Все дальнейшие инструкции должны быть выполнены из под данного пользователя.
 - В переменную окружения PATH добавлены пути ```/home/hadoop/hadoop-3.4.0/sbin```, ```/home/hadoop/hadoop-3.4.0/bin```
+- Опубликованы веб интерфейсы NameNode и Secondary NameNode как в этой инструкции (ДЗ1): https://github.com/szarema/Hadoop_hse  
 
 ## Шаг 1: Настройка названий нод, чтобы не вводить каждый раз ip адрес. 
 В файл /etc/hosts на team@team-5-jn, team@team-5-nn, team@team-5-dn-00, team@team-5-dn-01 вставить следующие строчки в конец файла:
@@ -74,8 +73,50 @@
 ```bash
 mapred --daemon start historyserver
 ```
+## Шаг 6: Настройка Nginx для YARN и History Server
 
-## Шаг 4. Остановка всех сервисов
+```bash
+# Создаем файл для yarn
+touch /etc/nginx/sites-available/yarn
+
+# Заполняем файл и прописываем аутентификацию по паролю
+sudo vim /etc/nginx/sites-available/yarn
+```
+
+Содержимое файла:
+
+```nginx
+server {
+    listen 8088 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+
+    location / {
+        proxy_pass http://team-5-nn:8088;
+        auth_basic "Restricted Access";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+    }
+}
+```
+
+```bash
+# Добавляем UI namenode к доступным сайтам
+sudo ln -s /etc/nginx/sites-available/yarn /etc/nginx/sites-enabled/yarn
+```
+
+Повторите аналогичные шаги для (в каждом файле в двух местах меняем порты):
+- History Server (порт 19888)
+
+### Доступ к веб-интерфейсам
+
+После настройки вы можете получить доступ к следующим веб-интерфейсам:
+- NameNode UI: http://176.109.91.7:9870
+- Secondary NameNode UI: http://176.109.91.7:9868
+- YARN ResourceManager: http://176.109.91.7:8088
+- History Server: http://176.109.91.7:19888
+
+## Шаг 5. Остановка всех сервисов
 
 - Остановка History Server. На team-5-nn выполнить команду ```mapred --daemon stop historyserver``` Из директории ```~/hadoop-3.4.0```
 - Остановка YARN. На team-5-nn выполнить команду ```./sbin/stop-yarn.sh``` Из директории ```~/hadoop-3.4.0```
